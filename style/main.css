@@ -155,8 +155,8 @@
     position: fixed;
     background: var(--rate-color);
     color: white;
-    top: 22%;
-    right: 28.5%;
+    top: 21%;
+    right: 29%;
     z-index: 20;
     padding: .2rem;
     display: flex;
@@ -319,9 +319,27 @@
     .product-card {
         width: calc((100% - 2rem) / 2);
     }
+    .popup-cursor{
+        top: 32%;
+    }
 }
-@media (max-width:600px) {
+@media (max-width:768px) {
+    .popup-container{
+        width: 80%;
+    }
+    .popup-cursor{
+        top: 31%;
+        right: 8%;
+    }
+}
+@media  (max-width:425px){
+    html{
+        font-size: 12px;
+    }
     .product-card {
         width: 100%;
+    }
+    .popup-cursor{
+        top: 36.5%;
     }
 }
