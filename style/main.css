@@ -148,26 +148,6 @@
 .out-of-stock {
     display: block;
 }
-.popup-cursor{
-    width: 1em;
-    height: 1em;
-    border-radius: 50%;
-    position: fixed;
-    background: var(--rate-color);
-    color: white;
-    top: 21%;
-    right: 29%;
-    z-index: 20;
-    padding: .2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: .4s;
-    cursor: pointer;
-}
-.popup-cursor:hover{
-    background-color: red;
-}
 .popup{
     width: 100%;
     height: 100%;
@@ -230,6 +210,28 @@
     display: flex;
     flex-direction: column;
     gap: .5rem;
+}
+.popup-cursor{
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    position: absolute;
+    background: var(--rate-color);
+    color: white;
+    top: 0;
+    right: 0;
+    z-index: 20;
+    padding: .2rem;
+    margin: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: .4s;
+    cursor: pointer;
+}
+.popup-cursor:hover{
+    opacity: .7;
 }
 .popup-content h3{
     font-weight: 600;
@@ -319,27 +321,34 @@
     .product-card {
         width: calc((100% - 2rem) / 2);
     }
-    .popup-cursor{
-        top: 32%;
+    .popup-container{
+        width: 80%;
     }
 }
 @media (max-width:768px) {
     .popup-container{
-        width: 80%;
-    }
-    .popup-cursor{
-        top: 31%;
-        right: 8%;
+        width: 80% !important;
     }
 }
-@media  (max-width:425px){
+@media  (max-width:428px){
     html{
         font-size: 12px;
     }
     .product-card {
-        width: 100%;
+        width: 90%;
+        margin: auto;
     }
-    .popup-cursor{
-        top: 36.5%;
+    .container-md{
+        width: 90% !important;
+        margin: auto !important;
+    }
+    .products-header{
+        margin-top: 3rem;
+    }
+    .products-header-list{
+        font-size: 1rem;
+    }
+    .weight span{
+        padding: .03rem .6rem;
     }
 }

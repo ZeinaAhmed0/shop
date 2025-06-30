@@ -225,22 +225,23 @@ function putProductsContent(productsData) {
 putProductsContent(products)
 
 //popup
-const popup = document.querySelector(".popup")
-const popupContainer = document.querySelector(".popup-container")
-const popupCursor = document.querySelector(".popup-cursor")
-function closePopup() {
-    popup.classList.remove("show")
-    popupContainer.classList.remove("show-container")
-}
+const popup = document.querySelector(".popup");
+const popupContainer = document.querySelector(".popup-container");
+let defaultWeight = 250;
 function showPopup(productId) {
     popup.classList.add("show")
     popupContainer.classList.add("show-container")
     const filterProducts = products.find((product)=> product.id == productId)
     putPopupContent(filterProducts)
 }
+function closePopup() {
+    popup.classList.remove("show")
+    popupContainer.classList.remove("show-container")
+}
 function putPopupContent(product) {
     let html = ``
-    html +=`<div class="popup-img">
+    html +=`<div class="popup-cursor" onclick="closePopup()">X</div>
+    <div class="popup-img">
         <img src="${product.image}" alt="">
     </div>
     <div class="popup-content">
@@ -256,10 +257,7 @@ function putPopupContent(product) {
             <del>${product.isDiscount? "$" + product.oldPrice : ""}</del>
         </div>
         <div class="weight">
-            <span class="active">${product.sub_category == "Juice" ? product.weight[0] + "ml"  : product.weight[0] + "g" }</span>
-            <span>${product.sub_category == "Juice" ? product.weight[1] + "ml"  : product.weight[1] + "g" }</span>
-            <span>${product.sub_category == "Juice" ? product.weight[2] + "ml"  : product.weight[2] + "g" }</span>
-            <span>${product.sub_category == "Juice" ? product.weight[3] + "ml"  : product.weight[3] + "g" }</span>
+            ${product.weight.map((weight)=>`<span class="${weight == defaultWeight ? "active": ""}" data-value ="${weight}" onclick = "chooseWeight(this)"> ${product.sub_category == "Juice" ? weight +"ml" : weight + "g"}</span>`).join("")}
         </div>
         <div class="cart-content">
             <div class="counter">
@@ -280,4 +278,12 @@ function putPopupContent(product) {
     </div>`
     popupContainer.innerHTML = html
 }
-
+// to choose weight
+function chooseWeight(ele) {
+    let weightContainer = document.querySelectorAll(".weight span")
+    weightContainer.forEach((item)=>{
+                item.classList.remove("active")
+            });
+    ele.classList.add("active")
+    defaultWeight = ele.dataset.value
+}
