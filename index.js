@@ -261,12 +261,7 @@ function putPopupContent(product) {
             ${product.weight.map((weight) => `<span class="${weight == defaultWeight ? "active" : ""}" data-value ="${weight}" onclick = "chooseWeight(this)"> ${product.sub_category == "Juice" ? weight + "ml" : weight + "g"}</span>`).join("")}
         </div>
         <div class="cart-content">
-            <div class="counter">
-                <span class="dec">-</span>
-                <span class="count">1</span>
-                <span class="inc">+</span>
-            </div>
-            <div class="add-to-cart-content">
+            <div class="add-to-cart-content" onclick="addToCart(${product.id})">
                 <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="16" width="16"
                             xmlns="http://www.w3.org/2000/svg">
                             <path
