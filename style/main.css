@@ -1,5 +1,6 @@
 @import url(./rest.css);
 @import url(./root.css);
+@import url(./cart.css);
 .products-header{
     display: flex;
     justify-content: space-between;
@@ -349,7 +350,7 @@
         font-size: 1.5rem;
     }
     .products-header-list h3{
-        font-size: 1rem;
+        font-size: 1=rem;
     }
     .weight span{
         padding: .03rem .6rem;

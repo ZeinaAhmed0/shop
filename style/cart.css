@@ -1,0 +1,109 @@
+.txt p, .txt span{
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+.txt span{
+    color: black;
+}
+.cart-product-nav{
+    margin-top: 4rem;
+}
+.cart-product-nav span{
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+.img-box{
+    width: 7rem;
+    height: 7rem;
+}
+.img-box img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.cart-products-container p, .cart-products-container span{
+    font-weight: 500;
+    font-size: 1.2rem;
+    text-transform: capitalize;
+}
+.product-name{
+    transition: .4s;
+    cursor: pointer;
+}
+.product-name:hover{
+    color: var(--main-color);
+}
+.cart-counter span{
+    cursor: pointer;
+}
+.remove i{
+    font-size: 1.6rem;
+    cursor: pointer;
+}
+.cart-btn{
+    background-color: var(--main-color);
+    color: black;
+    width: fit-content;
+    padding: .6rem 1.8rem;
+    font-weight: 500;
+}
+.cart-btn a{
+    color: black;
+}
+.cart-btn:hover{
+    opacity: .8;
+}
+.update-cart-btn{
+    background-color:var(--main-color) ;
+    color: black;
+    border: .0125rem solid;
+    width: fit-content;
+    padding: .6rem 1.8rem;
+    font-weight: 500;
+}
+.update-cart-btn:hover{
+    background-color: var(--main-color);
+    color: black ;
+}
+.total{
+    border: 1px solid black;
+    padding: 2rem;
+}
+.total p , .total span{
+    font-weight: 500;
+    font-size: 1.2rem;
+    margin: 0 !important;
+}
+.checkout-btn{
+    background-color: var(--main-color);
+    color:  black;
+    width: 100%;
+    padding: .8rem 1.5rem;
+    font-weight: 500;
+}
+a span {
+    font-size: 1.2rem;
+}
+a svg{
+    cursor: pointer;
+    width: 2rem ;
+    height: 2rem;
+}
+a{
+    text-decoration: none !important;
+}
+.cart-number{
+background-color: var(--main-color);
+position: absolute;
+bottom: -1.5rem;
+right: -.8rem;
+width: 1.5rem;
+height: 1.5rem;
+border-radius: 50%;
+color: black;
+font-weight: 500;
+display: flex;
+align-items: center;
+justify-content: center;
+}

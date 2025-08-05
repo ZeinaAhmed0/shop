@@ -115,11 +115,13 @@ const products = [
 const productsContainer = document.querySelector(".products-container");
 let categoryType = "all";
 const productsCategoryContainer = document.querySelector(".products-header-list");
+let cartNumber = document.querySelector(".cart-number")
+let cart = JSON.parse(localStorage.getItem("cart")) || []
 
 function filterCategory() {
     if (categoryType == "all") {
         return putProductsContent(products);
-    }else{
+    } else {
         const filterProductsCategory = products.filter((item) => item.category == categoryType);
         return putProductsContent(filterProductsCategory)
     }
@@ -129,29 +131,29 @@ function handleCategories() {
     const categories = [];
     products.map((category) => categories.push(category.category));
     const uniqueCategories = ["all", ...new Set(categories)];
-    console.log("categories: "+ uniqueCategories);
+    console.log("categories: " + uniqueCategories);
     const result = uniqueCategories.map((item) => ({
         value: item,
         label: item.toUpperCase()
     }));
     let html = ``;
-    result.forEach((category)=> {
-        return ( html += `<h3 class="${category.value == categoryType ? "active" : ""}" data-value ="${category.value}">${category.label}</h3>
+    result.forEach((category) => {
+        return (html += `<h3 class="${category.value == categoryType ? "active" : ""}" data-value ="${category.value}">${category.label}</h3>
         ${result.length - 1 != result.indexOf(category) ? "<span>/</span>" : ""}`);
     })
     productsCategoryContainer.innerHTML = html;
     const item = document.querySelectorAll(" .products-header-list h3");
     item.forEach(
-        (ele)=> (ele.onclick = () => {
-        categoryType = ele.dataset.value;
-        item.forEach((ele)=> ele.classList.remove("active"));
-        ele.classList.add("active");
-        filterCategory();
-    }))
+        (ele) => (ele.onclick = () => {
+            categoryType = ele.dataset.value;
+            item.forEach((ele) => ele.classList.remove("active"));
+            ele.classList.add("active");
+            filterCategory();
+        }))
 }
 handleCategories()
 function putProductsContent(productsData) {
-    let html =``
+    let html = ``
     productsData.forEach((product) => {
         html += `
         <div class="product-card">
@@ -187,7 +189,7 @@ function putProductsContent(productsData) {
                         </path>
                     </svg>
                 </div>
-                <div class="icon">
+                <div class="icon" onclick="addToCart(${product.id})">
                     <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="25" width="25"
                         xmlns="http://www.w3.org/2000/svg">
                         <g id="Shopping_Cart">
@@ -203,19 +205,18 @@ function putProductsContent(productsData) {
             <div class="product-card-content-category">
                 <span>${product.sub_category}</span>
                 <div class="product-card-content-rate">
-                ${new Array(5).fill(0).map((ele, index)=> product.rate > index ? `<svg class="${
-                    product.rate > index ? "active" : ""
-                }"stroke="currentColor" fill="currentColor" stroke-width="1px" viewBox="0 0 576 512" height="16" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"></path></svg>` : `<svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 576 512" height="16" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M528.1 171.5L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6zM388.6 312.3l23.7 138.4L288 385.4l-124.3 65.3 23.7-138.4-100.6-98 139-20.2 62.2-126 62.2 126 139 20.2-100.6 98z"></path></svg>`).join("")}
+                ${new Array(5).fill(0).map((ele, index) => product.rate > index ? `<svg class="${product.rate > index ? "active" : ""
+            }"stroke="currentColor" fill="currentColor" stroke-width="1px" viewBox="0 0 576 512" height="16" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"></path></svg>` : `<svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 576 512" height="16" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M528.1 171.5L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6zM388.6 312.3l23.7 138.4L288 385.4l-124.3 65.3 23.7-138.4-100.6-98 139-20.2 62.2-126 62.2 126 139 20.2-100.6 98z"></path></svg>`).join("")}
                 </div>
             </div>
             <a href="#">${product.title}</a>
             <div class="product-card-content-price">
                 <div class="product-card-content-price-container">
-                    <strong>${product.isDiscount? product.newPrice + "$":product.oldPrice + "$"}</strong>
-                    <del>${product.isDiscount? product.oldPrice +"$":""}</del>
-                    <span class="out-of-stock">${product.out_of_stock? "out of stock" : ""}</span>
+                    <strong>${product.isDiscount ? product.newPrice + "$" : product.oldPrice + "$"}</strong>
+                    <del>${product.isDiscount ? product.oldPrice + "$" : ""}</del>
+                    <span class="out-of-stock">${product.out_of_stock ? "out of stock" : ""}</span>
                 </div>
-                <span>${product.sub_category== "Juice" ? product.weight[0] + "ml"  : product.weight[0] + "g" }</span>
+                <span>${product.sub_category == "Juice" ? product.weight[0] + "ml" : product.weight[0] + "g"}</span>
             </div>
         </div>
     </div>`
@@ -223,6 +224,7 @@ function putProductsContent(productsData) {
     productsContainer.innerHTML = html;
 }
 putProductsContent(products)
+addProductNumber()
 
 //popup
 const popup = document.querySelector(".popup");
@@ -231,7 +233,7 @@ let defaultWeight = 250;
 function showPopup(productId) {
     popup.classList.add("show")
     popupContainer.classList.add("show-container")
-    const filterProducts = products.find((product)=> product.id == productId)
+    const filterProducts = products.find((product) => product.id == productId)
     putPopupContent(filterProducts)
 }
 function closePopup() {
@@ -240,24 +242,23 @@ function closePopup() {
 }
 function putPopupContent(product) {
     let html = ``
-    html +=`<div class="popup-cursor" onclick="closePopup()">X</div>
+    html += `<div class="popup-cursor" onclick="closePopup()">X</div>
     <div class="popup-img">
         <img src="${product.image}" alt="">
     </div>
     <div class="popup-content">
         <h3>${product.title}</h3>
     <div class="popup-rate">
-    ${new Array(5).fill(0).map((ele, index)=> product.rate > index ? `<svg class="${
-        product.rate > index ? "active" : ""
-    }"stroke="currentColor" fill="currentColor" stroke-width="1px" viewBox="0 0 576 512" height="16" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"></path></svg>` : `<svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 576 512" height="16" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M528.1 171.5L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6zM388.6 312.3l23.7 138.4L288 385.4l-124.3 65.3 23.7-138.4-100.6-98 139-20.2 62.2-126 62.2 126 139 20.2-100.6 98z"></path></svg>`).join("")}
+    ${new Array(5).fill(0).map((ele, index) => product.rate > index ? `<svg class="${product.rate > index ? "active" : ""
+        }"stroke="currentColor" fill="currentColor" stroke-width="1px" viewBox="0 0 576 512" height="16" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"></path></svg>` : `<svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 576 512" height="16" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M528.1 171.5L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6zM388.6 312.3l23.7 138.4L288 385.4l-124.3 65.3 23.7-138.4-100.6-98 139-20.2 62.2-126 62.2 126 139 20.2-100.6 98z"></path></svg>`).join("")}
     </div>
     <p>${product.description}</p>
         <div class="price">
-            <strong>${product.isDiscount? "$" + product.newPrice : "$" + product.oldPrice }</strong>
-            <del>${product.isDiscount? "$" + product.oldPrice : ""}</del>
+            <strong>${product.isDiscount ? "$" + product.newPrice : "$" + product.oldPrice}</strong>
+            <del>${product.isDiscount ? "$" + product.oldPrice : ""}</del>
         </div>
         <div class="weight">
-            ${product.weight.map((weight)=>`<span class="${weight == defaultWeight ? "active": ""}" data-value ="${weight}" onclick = "chooseWeight(this)"> ${product.sub_category == "Juice" ? weight +"ml" : weight + "g"}</span>`).join("")}
+            ${product.weight.map((weight) => `<span class="${weight == defaultWeight ? "active" : ""}" data-value ="${weight}" onclick = "chooseWeight(this)"> ${product.sub_category == "Juice" ? weight + "ml" : weight + "g"}</span>`).join("")}
         </div>
         <div class="cart-content">
             <div class="counter">
@@ -281,9 +282,32 @@ function putPopupContent(product) {
 // to choose weight
 function chooseWeight(ele) {
     let weightContainer = document.querySelectorAll(".weight span")
-    weightContainer.forEach((item)=>{
-                item.classList.remove("active")
-            });
+    weightContainer.forEach((item) => {
+        item.classList.remove("active")
+    });
     ele.classList.add("active")
     defaultWeight = ele.dataset.value
+}
+// cart
+function addToCart(selectedProductIndex) {
+    let FindSelectedProduct = products.find((ele) => { return ele.id == selectedProductIndex })
+    let productIndex = cart.findIndex((ele) => { return ele.id == FindSelectedProduct.id })
+    if (productIndex != -1) {
+        cart[productIndex].quantity++
+        localStorage.setItem("cart", JSON.stringify(cart))
+    } else {
+        cart.push({ ...FindSelectedProduct, quantity: 1 })
+        localStorage.setItem("cart", JSON.stringify(cart))
+        Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Product Added Successfully",
+            showConfirmButton: false,
+            timer: 1000
+        });
+    }
+    addProductNumber()
+}
+function addProductNumber() {
+    cartNumber.innerText = cart.length
 }
